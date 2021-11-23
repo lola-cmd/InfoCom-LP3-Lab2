@@ -1,5 +1,4 @@
-import sys
-import numpy as np
+import math
 import requests
 import argparse
 
@@ -7,7 +6,7 @@ def getMovement(src, dst):
     speed = 0.00001
     dst_x, dst_y = dst
     x, y = src
-    direction = np.sqrt((dst_x - x)**2 + (dst_y - y)**2)
+    direction = math.sqrt((dst_x - x)**2 + (dst_y - y)**2)
     longitude_move = speed * ((dst_x - x) / direction )
     latitude_move = speed * ((dst_y - y) / direction )
     return longitude_move, latitude_move

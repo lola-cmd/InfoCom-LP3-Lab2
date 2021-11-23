@@ -30,14 +30,6 @@ def route_planner():
         message = 'Destination address not found, please input a correct address'
     else:
         message = 'Get addresses! Start moving'
-        CMD = ["python3", "../pi/pi_controller.py", '--clong', str(current_location[0]), '--clat', str(current_location[1]),
-                                                 '--flong', str(from_location.longitude), '--flat', str(from_location.latitude),
-                                                 '--tlong', str(to_location.longitude), '--tlat', str(to_location.latitude)
-              ]
-        print(current_location)
-        print(from_location.longitude, from_location.latitude)
-        print(to_location.longitude, to_location.latitude)
-        print(CMD)
         subprocess.Popen(["python3", "../pi/pi_controller.py", '--clong', str(current_location[0]), '--clat', str(current_location[1]),
                                                  '--flong', str(from_location.longitude), '--flat', str(from_location.latitude),
                                                  '--tlong', str(to_location.longitude), '--tlat', str(to_location.latitude)
