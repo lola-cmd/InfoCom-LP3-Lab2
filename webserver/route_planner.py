@@ -33,8 +33,8 @@ def route_planner():
     else:
         message = 'Get addresses! Send to Drone'
         coords = {'current': (current_location[0],current_location[1]),
-                  'src': (from_location.longitude, from_location.latitude),
-                  'dst': (to_location.longitude, to_location.latitude),
+                  'from': (from_location.longitude, from_location.latitude),
+                  'to': (to_location.longitude, to_location.latitude),
                   }
         try:
             with requests.session() as session:

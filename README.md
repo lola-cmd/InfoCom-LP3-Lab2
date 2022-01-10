@@ -1,28 +1,40 @@
-# LP2 Drone Project - Lab 2
+# LP3 Drone Project - Lab 1
 Intall the requied Python packages, redis is added in the list
 ```
 pip3 install -r requirements.txt
 ```
-Go to `/webserver`, start your Redis server and run the two flask servers:
 
-1. Run server that for writing data to the redis server
+## On the server:
+Go to `/webserver`, start your Redis server and run the two flask servers:
+1. On Terminal 1, start your redis server
+2. On Terminal 2, run `database.py`
 ```
 export FLASK_APP=database.py
 export FLASK_ENV=development
 flask run --port=5001
 ```
-2. Open a new terminal, and run `build.py`
+3. On Terminal 3, run `build.py`
 ```
 export FLASK_APP=build.py
 export FLASK_ENV=development
 flask run
 ```
-
-Go to `/pi`, run the Pi controller:
+4. On Terminal 4, run `route_planner.py`
 ```
-python3 pi_controller.py
+export FLASK_APP=router_planner.py
+export FLASK_ENV=development
+flask run --port=5002
 ```
-You can replace `pi_controller.py` with the one you created in Part 1, but keep `SERVER_URL` the same as in the file provied in this lab.
 
-Note: Don't user `python3 build.py` to run the webserver, since this does not porvide all the functionalities requied by the application.
+## On the drone
+You need to install the Python packages in the requirements if you havn't done any. 
+
+Go to `/pi`, run `drone.py`
+```
+export FLASK_APP=drone.py
+export FLASK_ENV=development
+flask run
+```
+
+Note: Don't user `python3 build.py` to run the servers, since this does not porvide all the functionalities requied by the application.
 
