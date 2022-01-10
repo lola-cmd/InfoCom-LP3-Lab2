@@ -12,9 +12,10 @@ redis_server = redis.Redis(host="localhost", port="6379")
 
 geolocator = Nominatim(user_agent="my_request")
 region = ", Lund, Skåne, Sweden"
-DRONE_URL = "http://192.168.1.61:5000"
-# server_address = ('0.0.0.0', 10000) 
-
+#================================================================
+#Put the IP address of your drone
+DRONE_URL = "http://DRONE_IP:5000"
+#================================================================
 @app.route('/planner', methods=['POST'])
 def route_planner():
     Addresses =  json.loads(request.data.decode())
