@@ -1,17 +1,21 @@
+from os import fdopen
 from flask import Flask, render_template, request
+from flask.json import jsonify
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import time
 import redis
+import pickle
+import json
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
-socket = SocketIO(app, cors_allowed_origins="*")
+# socket = SocketIO(app, cors_allowed_origins="*")
 
 # change this so rhat you can connect to your redis server
 # ===============================================
-redis_server = redis.Redis("REDIS_SERVER")
+redis_server = redis.Redis("localhost", decode_responses=True, charset="unicode_escape")
 # ===============================================
 
 # Translate OSM coordinate (longitude, latitude) to SVG coordinates (x,y).
@@ -37,14 +41,18 @@ def translate(coords_osm):
 def map():
     return render_template('index.html')
 
-@socket.on('get_location')
-def get_location():
-    while True:
-        longitude = float(redis_server.get('longitude'))
-        latitude = float(redis_server.get('latitude'))
-        x_svg, y_svg = translate((longitude, latitude))
-        emit('get_location', (x_svg, y_svg))
-        time.sleep(0.01)
+@app.route('/get_drones', methods=['GET'])
+def get_drones():
+    resp_dict = {}
+    for key in redis_server.scan_iter():
+        print(key)
+        location = json.loads(redis_server.get(key))
+        print(location)
+        x_svg, y_svg = translate((location['longitude'], location['latitude']))
+        resp_dict.update({key: {'longitude': x_svg, 'latitude': y_svg, 'status': location['status']}})
+    print(resp_dict)
+    response = jsonify(resp_dict)
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port='5000')
