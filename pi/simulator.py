@@ -17,24 +17,36 @@ def moveDrone(src, d_long, d_la):
     y = y + d_la        
     return (x, y)
 
-def run(current_coords, from_coords, to_coords, SERVER_URL):
+def run(id, current_coords, from_coords, to_coords, SERVER_URL):
     drone_coords = current_coords
     d_long, d_la =  getMovement(drone_coords, from_coords)
     while ((from_coords[0] - drone_coords[0])**2 + (from_coords[1] - drone_coords[1])**2)*10**6 > 0.0002:
         drone_coords = moveDrone(drone_coords, d_long, d_la)
         with requests.Session() as session:
-            drone_location = {'longitude': drone_coords[0],
-                            'latitude': drone_coords[1]
+            drone_info = {'id': id,
+                          'longitude': drone_coords[0],
+                          'latitude': drone_coords[1],
+                          'status': 'busy'
                         }
-            resp = session.post(SERVER_URL, json=drone_location)
+            resp = session.post(SERVER_URL, json=drone_info)
     d_long, d_la =  getMovement(drone_coords, to_coords)
     while ((to_coords[0] - drone_coords[0])**2 + (to_coords[1] - drone_coords[1])**2)*10**6 > 0.0002:
         drone_coords = moveDrone(drone_coords, d_long, d_la)
         with requests.Session() as session:
-            drone_location = {'longitude': drone_coords[0],
-                            'latitude': drone_coords[1]
+            drone_info = {'id': id,
+                          'longitude': drone_coords[0],
+                          'latitude': drone_coords[1],
+                          'status': 'busy'
                         }
-            resp = session.post(SERVER_URL, json=drone_location)
+            resp = session.post(SERVER_URL, json=drone_info)
+    with requests.Session() as session:
+            drone_info = {'id': id,
+                          'longitude': drone_coords[0],
+                          'latitude': drone_coords[1],
+                          'status': 'idle'
+                         }
+            resp = session.post(SERVER_URL, json=drone_info)
+    return drone_coords[0], drone_coords[1]
    
 if __name__ == "__main__":
     SERVER_URL = "http://WEBSERVER_IP:5001/drone"
@@ -46,6 +58,7 @@ if __name__ == "__main__":
     parser.add_argument("--flat", help='latitude of input [from address]' ,type=float)
     parser.add_argument("--tlong", help ='longitude of input [to address]' ,type=float)
     parser.add_argument("--tlat", help ='latitude of input [to address]' ,type=float)
+    parser.add_argument("--id", help ='drones ID' ,type=str)
     args = parser.parse_args()
 
     current_coords = (args.clong, args.clat)
@@ -53,4 +66,6 @@ if __name__ == "__main__":
     to_coords = (args.tlong, args.tlat)
 
     print(current_coords, from_coords, to_coords)
-    run(current_coords, from_coords, to_coords, SERVER_URL)
+    drone_long, drone_lat = run(args.id ,current_coords, from_coords, to_coords, SERVER_URL)
+    with open('drone_location.txt', 'w') as file:
+        file.write(str(drone_long) + ',' + str(drone_lat))
