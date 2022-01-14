@@ -31,15 +31,17 @@
   </script>
   <script type="text/javascript">
     function LoadDrone(droneID, x, y, status) {
-      var doc = document.getElementById("map").getSVGDocument();
-      var svg = doc.getElementById("map-svg");
-      var circleNode = document.getElementById(droneID);
+      var doc = document.getElementById("map");
+      $( doc ).ready(function() {
+      var doc_svg = doc.getSVGDocument();
+      var svg = doc_svg.getElementById("map-svg");
+      var circleNode = svg.getElementById(droneID);
       var color = 'red';
       if (status == 'idle'){
         color = 'green'
       }
       if(circleNode == null){
-        circleNode = doc.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circleNode = doc_svg.createElementNS("http://www.w3.org/2000/svg", "circle");
         circleNode.setAttributeNS(null, 'cx', x);
         circleNode.setAttributeNS(null, 'cy', y);
         circleNode.setAttributeNS(null, 'r', '5');
@@ -49,11 +51,11 @@
       else{
         circleNode.setAttributeNS(null, 'cx', x);
         circleNode.setAttributeNS(null, 'cy', y);
-        circleNode.setAttributeNS(null, 'r', '5');
         circleNode.setAttributeNS(null, 'fill', color);
-        circleNode.setAttributeNS(null, 'id', droneID);
       }
     }
+  )
+}
   </script> 
 </head>
 

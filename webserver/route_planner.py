@@ -7,10 +7,10 @@ import redis
 import json
 import requests
 
-from webserver.database import drone
-
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
+app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
+
 redis_server = redis.Redis(host="localhost", port="6379", decode_responses=True)
 
 geolocator = Nominatim(user_agent="my_request")
@@ -26,10 +26,10 @@ def find_avalaible_drone(drones):
 
 def request_to_drone(key, coords):
     DRONE_URL = json.loads(redis_server.get(key))['url']
+    DRONE_URL = 'http://' + DRONE_URL+':5000'
     with requests.session() as session:
         resp = session.post(DRONE_URL, json=coords)
         print(resp.text)
-
 
 @app.route('/planner', methods=['POST'])
 def route_planner():
@@ -37,8 +37,8 @@ def route_planner():
     Addresses =  json.loads(request.data.decode())
     FromAddress = Addresses['faddr']
     ToAddress = Addresses['taddr']
-    from_location = geolocator.geocode(FromAddress + region)
-    to_location = geolocator.geocode(ToAddress + region)
+    from_location = geolocator.geocode(FromAddress + region, timeout=None)
+    to_location = geolocator.geocode(ToAddress + region, timeout=None)
     if from_location is None:
         message = 'Departure address not found, please input a correct address'
         return message

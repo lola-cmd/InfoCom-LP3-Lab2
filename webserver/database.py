@@ -5,7 +5,7 @@ import json
 
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app)
 # app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
 
 # change this to connect to your redis server
@@ -16,7 +16,7 @@ redis_server = redis.Redis("localhost", decode_responses=True, charset="unicode_
 @app.route('/drone', methods=['POST'])
 def drone():
     drone = request.get_json()
-    droneURL = request.url
+    droneURL = request.remote_addr
     drone_info = {'longitude': drone['longitude'],
                   'latitude': drone['latitude'],
                   'url': droneURL,

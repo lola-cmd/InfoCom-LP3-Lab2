@@ -9,7 +9,7 @@ import pickle
 import json
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
 # socket = SocketIO(app, cors_allowed_origins="*")
 
