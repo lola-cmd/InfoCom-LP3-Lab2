@@ -40,7 +40,7 @@ def main():
     with open('drone_location.txt', 'r') as file:
         current_location = file.read()
         current_longitude = float(current_location.split(',')[0])
-        current_latitude = float(current_location.split(',')[0])
+        current_latitude = float(current_location.split(',')[1])
     from_coord = coords['from']
     to_coord = coords['to']
     subprocess.Popen(["python3", "simulator.py", '--clong', str(current_longitude), '--clat', str(current_latitude),

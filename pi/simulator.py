@@ -49,7 +49,7 @@ def run(id, current_coords, from_coords, to_coords, SERVER_URL):
     return drone_coords[0], drone_coords[1]
    
 if __name__ == "__main__":
-    SERVER_URL = "http://WEBSERVER_IP:5001/drone"
+    SERVER_URL = "http://192.168.1.35:5001/drone"
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--clong", help='current longitude of drone location' ,type=float)
