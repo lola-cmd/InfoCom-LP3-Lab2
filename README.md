@@ -1,10 +1,10 @@
-# LP3 Drone Project - Lab 1
+# LP3 Drone Project - Lab 2
 Intall the requied Python packages, redis is added in the list
 ```
 pip3 install -r requirements.txt
 ```
 
-## On the server:
+## On the Server Pi:
 Go to `/webserver`, start your Redis server and run the two flask servers:
 1. On Terminal 1, start your redis server
 2. On Terminal 2, run `database.py`
@@ -26,7 +26,7 @@ export FLASK_ENV=development
 flask run --port=5002
 ```
 
-## On the drone
+## On the Drone Pis:
 You need to install the Python packages in the requirements if you havn't done any. 
 
 Go to `/pi`, run `drone.py`
