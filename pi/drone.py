@@ -9,38 +9,38 @@ CORS(app, supports_credentials=True)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
 
 
-myID = "Drone1"
-print(myID)
-init_location = (13.21008, 55.71106)
-try:
-    with open('drone_location.txt', 'r') as file:
-        current_location = file.read()
-        current_longitude = float(current_location.split(',')[0])
-        current_latitude = float(current_location.split(',')[1])
-except FileNotFoundError:
-    current_longitude = init_location[0]
-    current_latitude = init_location[1]
-    with open('drone_location.txt', 'w+') as file:
-        file.write(str(current_longitude) + ',' + str(current_latitude))
+#Give a unique ID for the drone
+#===================================================================
+myID = "DRONE_ID"
+#===================================================================
+
+# Get initial longitude and latitude the drone
+#===================================================================
+current_longitude = 0
+current_latitude = 0
+#===================================================================
 
 drone_info = {'id': myID,
                 'longitude': current_longitude,
                 'latitude': current_latitude,
-                'status': 'idle'}
-print(drone_info)
+                'status': 'idle'
+            }
 
-DATABASE="http://192.168.1.35:5001/drone"
+# Fill in the IP address of server, and send the initial location of the drone to the SERVER
+#===================================================================
+SERVER="http://SERVER_IP:PORT/drone"
 with requests.Session() as session:
-    resp = session.post(DATABASE, json=drone_info)
-print('done')
+    resp = session.post(SERVER, json=drone_info)
+#===================================================================
 
 @app.route('/', methods=['POST'])
 def main():
     coords = request.json
-    with open('drone_location.txt', 'r') as file:
-        current_location = file.read()
-        current_longitude = float(current_location.split(',')[0])
-        current_latitude = float(current_location.split(',')[1])
+    # Get current longitude and latitude of the drone 
+    #===================================================================
+    current_longitude = 0
+    current_latitude = 0
+    #===================================================================
     from_coord = coords['from']
     to_coord = coords['to']
     subprocess.Popen(["python3", "simulator.py", '--clong', str(current_longitude), '--clat', str(current_latitude),

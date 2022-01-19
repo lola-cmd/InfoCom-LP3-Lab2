@@ -6,23 +6,26 @@ import json
 
 app = Flask(__name__)
 CORS(app)
-# app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
 
 # change this to connect to your redis server
 # ===============================================
-redis_server = redis.Redis("localhost", decode_responses=True, charset="unicode_escape")
+redis_server = redis.Redis("REDIS_SERVER", decode_responses=True, charset="unicode_escape")
 # ===============================================
 
 @app.route('/drone', methods=['POST'])
 def drone():
     drone = request.get_json()
-    droneURL = request.remote_addr
-    drone_info = {'longitude': drone['longitude'],
-                  'latitude': drone['latitude'],
-                  'url': droneURL,
-                  'status': drone['status']}
-    print(drone_info)
-    redis_server.set(drone['id'], json.dumps(drone_info))
+    droneIP = request.remote_addr
+    # Get the infomation of the drone in the request, and update the information in Redis database
+    # Data that need to be stored in the database: 
+    # Drone ID, logitude of the drone, latitude of the drone, drone's IP address, the status of the drone
+    # Note that you need to store the metioned infomation for all drones in Redis, think carefully how to store them
+    # =========================================================================================
+
+
+
+
+     # =======================================================================================
     return 'Get data'
 
 if __name__ == "__main__":

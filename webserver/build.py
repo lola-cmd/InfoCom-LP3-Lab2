@@ -8,14 +8,15 @@ import redis
 import pickle
 import json
 
+from webserver.database import drone
+
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
-# socket = SocketIO(app, cors_allowed_origins="*")
 
-# change this so rhat you can connect to your redis server
+# change this so that you can connect to your redis server
 # ===============================================
-redis_server = redis.Redis("localhost", decode_responses=True, charset="unicode_escape")
+redis_server = redis.Redis("REDIS_SERVER", decode_responses=True, charset="unicode_escape")
 # ===============================================
 
 # Translate OSM coordinate (longitude, latitude) to SVG coordinates (x,y).
@@ -43,15 +44,17 @@ def map():
 
 @app.route('/get_drones', methods=['GET'])
 def get_drones():
-    resp_dict = {}
-    for key in redis_server.scan_iter():
-        print(key)
-        location = json.loads(redis_server.get(key))
-        print(location)
-        x_svg, y_svg = translate((location['longitude'], location['latitude']))
-        resp_dict.update({key: {'longitude': x_svg, 'latitude': y_svg, 'status': location['status']}})
-    print(resp_dict)
-    response = jsonify(resp_dict)
+    #=============================================================================================================================================
+    # Get the information of all the drones from redis server and update the dictionary  drone_dict
+    # drone_dict should have the following format:
+    # e.g if there are two drones in the system with IDs: DRONE1 and DRONE2
+    # drone_dict = {'DRONE_1':{'longitude': drone1_logitude_svg, 'latitude': drone1_logitude_svg, 'status': drone1_status},
+    #               'DRONE_2': {'longitude': drone2_logitude_svg, 'latitude': drone2_logitude_svg, 'status': drone2_status}
+    #              }
+    # use function translate() to covert the coodirnates to svg coordinates
+    #=============================================================================================================================================
+    drone_dict = {}
+    response = jsonify(drone_dict)
     return response
 
 if __name__ == "__main__":

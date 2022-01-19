@@ -49,7 +49,10 @@ def run(id, current_coords, from_coords, to_coords, SERVER_URL):
     return drone_coords[0], drone_coords[1]
    
 if __name__ == "__main__":
-    SERVER_URL = "http://192.168.1.35:5001/drone"
+    # Fill in the IP address of server, in order to location of the drone to the SERVER
+    #===================================================================
+    SERVER_URL = "http://SERVER_IP:PORT/drone"
+    #===================================================================
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--clong", help='current longitude of drone location' ,type=float)
@@ -67,5 +70,5 @@ if __name__ == "__main__":
 
     print(current_coords, from_coords, to_coords)
     drone_long, drone_lat = run(args.id ,current_coords, from_coords, to_coords, SERVER_URL)
-    with open('drone_location.txt', 'w') as file:
-        file.write(str(drone_long) + ',' + str(drone_lat))
+    # drone_long and drone_lat is the final location when drlivery is completed, find a way save the value, and use it for the initial coordinates of next delivery
+    #=============================================================================
