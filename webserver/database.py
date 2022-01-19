@@ -16,6 +16,10 @@ redis_server = redis.Redis("REDIS_SERVER", decode_responses=True, charset="unico
 def drone():
     drone = request.get_json()
     droneIP = request.remote_addr
+    droneID = drone['id']
+    drone_longitude = drone['longitude']
+    drone_latitude = drone['latitude']
+    drone_status = drone['status']
     # Get the infomation of the drone in the request, and update the information in Redis database
     # Data that need to be stored in the database: 
     # Drone ID, logitude of the drone, latitude of the drone, drone's IP address, the status of the drone
