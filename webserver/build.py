@@ -45,7 +45,7 @@ def map():
 @app.route('/get_drones', methods=['GET'])
 def get_drones():
     #=============================================================================================================================================
-    # Get the information of all the drones from redis server and update the dictionary  drone_dict
+    # Get the information of all the drones from redis server and update the dictionary `drone_dict' to create the response 
     # drone_dict should have the following format:
     # e.g if there are two drones in the system with IDs: DRONE1 and DRONE2
     # drone_dict = {'DRONE_1':{'longitude': drone1_logitude_svg, 'latitude': drone1_logitude_svg, 'status': drone1_status},
