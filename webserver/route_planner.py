@@ -7,8 +7,6 @@ import redis
 import json
 import requests
 
-from webserver.database import drone
-
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
