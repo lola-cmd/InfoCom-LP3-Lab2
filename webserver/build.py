@@ -8,8 +8,6 @@ import redis
 import pickle
 import json
 
-from webserver.database import drone
-
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
