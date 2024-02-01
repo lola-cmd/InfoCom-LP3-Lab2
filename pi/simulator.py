@@ -17,7 +17,13 @@ def moveDrone(src, d_long, d_la):
     y = y + d_la        
     return (x, y)
 
+def saveLocation(coords):
+    with open("location.txt", "w") as f:
+        f.write(str(coords[0]) + "\n")
+        f.write(str(coords[1]))
+
 def run(id, current_coords, from_coords, to_coords, SERVER_URL):
+    saveLocation(to_coords)
     drone_coords = current_coords
     d_long, d_la =  getMovement(drone_coords, from_coords)
     while ((from_coords[0] - drone_coords[0])**2 + (from_coords[1] - drone_coords[1])**2)*10**6 > 0.0002:
@@ -51,7 +57,7 @@ def run(id, current_coords, from_coords, to_coords, SERVER_URL):
 if __name__ == "__main__":
     # Fill in the IP address of server, in order to location of the drone to the SERVER
     #===================================================================
-    SERVER_URL = "http://SERVER_IP:PORT/drone"
+    SERVER_URL = "http://192.168.1.1:5001/drone"
     #===================================================================
 
     parser = argparse.ArgumentParser()

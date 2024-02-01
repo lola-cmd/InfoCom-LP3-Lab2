@@ -13,7 +13,7 @@ app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
 
 # change this to connect to your redis server
 # ===============================================
-redis_server = redis.Redis("REDIS_SERVER", decode_responses=True, charset="unicode_escape")
+redis_server = redis.Redis(host="localhost", port=6379, decode_responses=True, charset="unicode_escape")
 # ===============================================
 
 geolocator = Nominatim(user_agent="my_request")
@@ -47,11 +47,26 @@ def route_planner():
         # 1. Find avialable drone in the database (Hint: Check keys in RedisServer)
         # if no drone is availble:
         message = 'No available drone, try later'
-        # else:
-            # 2. Get the IP of available drone, 
-        DRONE_URL = 'http://' + DRONE_IP+':5000'
-            # 3. Send coords to the URL of available drone
-        message = 'Got address and sent request to the drone'
+        
+        all_keys = redis_server.keys()
+        
+        idle_drone = None
+        
+        for key in all_keys:
+            obj = json.loads(redis_server.get(key))
+            if obj["status"] == "idle":
+                idle_drone = obj
+                break
+            
+        if idle_drone:
+            # else:
+                # 2. Get the IP of available drone, 
+            DRONE_URL = 'http://' + idle_drone["ip"]+':5000'
+                # 3. Send coords to the URL of available drone
+            send_request(DRONE_URL, coords)
+            message = 'Got address and sent request to the drone'
+            
+        
     return message
         # ======================================================================
 
