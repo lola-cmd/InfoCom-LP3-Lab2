@@ -13,12 +13,18 @@ app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
 #===================================================================
 myID = "drone.3"
 #===================================================================
+def loadLocation():
+    contents = ""
+    with open("location.txt", "r") as f:
+        contents = f.read()
+    coords = [float(x) for x in contents.split("\n")[0:2]]
+    return coords
 
 # Get initial longitude and latitude the drone
 #===================================================================
-coords = loadLocation()
-current_longitude = coords[0]
-current_latitude = coords[1]
+current_coords = loadLocation()
+current_longitude = current_coords[0]
+current_latitude = current_coords[1]
 #===================================================================
 
 drone_info = {'id': myID,
@@ -34,21 +40,16 @@ with requests.Session() as session:
     resp = session.post(SERVER, json=drone_info)
 #===================================================================
 
-def loadLocation():
-    contents = ""
-    with open("location.txt", "r") as f:
-        contents = f.read()
-    coords = [float(x) for x in contents.split("\n")]
-    return coords
+
 
 @app.route('/', methods=['POST'])
 def main():
     coords = request.json
     # Get current longitude and latitude of the drone 
     #===================================================================
-    coords = loadLocation()
-    current_longitude = coords[0]
-    current_latitude = coords[1]
+    current_coords = loadLocation()
+    current_longitude = current_coords[0]
+    current_latitude = current_coords[1]
     #===================================================================
     from_coord = coords['from']
     to_coord = coords['to']
