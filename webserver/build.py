@@ -40,6 +40,18 @@ def translate(coords_osm):
 def map():
     return render_template('index.html')
 
+@app.route('/get_position', methods=['GET'])
+def get_position():
+    return render_template('get_position.html')
+
+@app.route('/post_position', methods=['POST'])
+def post_position():
+    data =  json.loads(request.data.decode())
+    lat = data["lat"]
+    long = data["long"]
+
+    # redis_server.set("phone_position", )
+
 @app.route('/get_drones', methods=['GET'])
 def get_drones():
     #=============================================================================================================================================
