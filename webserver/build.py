@@ -50,10 +50,10 @@ def post_position():
     lat = data["lat"]
     long = data["long"]
 
-    # redis_server.set("phone_position", )
+    redis_server.set("phone_position", json.dumps({ "lat": lat, "long": long }))
 
-@app.route('/get_drones', methods=['GET'])
-def get_drones():
+@app.route('/callout', methods=['GET'])
+def callout():
     #=============================================================================================================================================
     # Get the information of all the drones from redis server and update the dictionary `drone_dict' to create the response 
     # drone_dict should have the following format:
@@ -65,9 +65,12 @@ def get_drones():
     #=============================================================================================================================================
     
     all_keys = redis_server.keys()
-    drone_dict = {}
+    return_dict = { "drones": {} }
     
     for key in all_keys:
+        if(key == "phone_position"):
+            continue
+
         obj = json.loads(redis_server.get(key))
         svg_coords = translate([obj["long"], obj["lat"]])
         
@@ -77,9 +80,12 @@ def get_drones():
             "status": obj["status"]
         }
         
-        drone_dict[key] = new_obj
+        return_dict["drones"][key] = new_obj
+
+    if(redis_server.get("phone_position")):
+        return_dict["phone_position"] = json.loads(redis_server.get("phone_position"))
     
-    return jsonify(drone_dict)
+    return jsonify(return_dict)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port='5000')
