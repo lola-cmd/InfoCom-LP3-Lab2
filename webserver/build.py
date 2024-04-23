@@ -40,17 +40,18 @@ def translate(coords_osm):
 def map():
     return render_template('index.html')
 
-@app.route('/get_position', methods=['GET'])
+@app.route('/position', methods=['GET'])
 def get_position():
-    return render_template('get_position.html')
+    return render_template('position.html')
 
 @app.route('/post_position', methods=['POST'])
 def post_position():
     data =  json.loads(request.data.decode())
     lat = data["lat"]
     long = data["long"]
-
+    print("GOT PHONE POSITION:", lat, long)
     redis_server.set("phone_position", json.dumps({ "lat": lat, "long": long }))
+    return jsonify({ "success": True })
 
 @app.route('/callout', methods=['GET'])
 def callout():
@@ -73,6 +74,7 @@ def callout():
 
         obj = json.loads(redis_server.get(key))
         svg_coords = translate([obj["long"], obj["lat"]])
+        print(obj, svg_coords)
         
         new_obj = {
             "longitude":svg_coords[0],
@@ -83,9 +85,14 @@ def callout():
         return_dict["drones"][key] = new_obj
 
     if(redis_server.get("phone_position")):
-        return_dict["phone_position"] = json.loads(redis_server.get("phone_position"))
+        phone_coords = json.loads(redis_server.get("phone_position"))
+        svg_coords = translate([phone_coords["long"], phone_coords["lat"]])
+        print(phone_coords, svg_coords)
+        return_dict["phone_svg"] = { "x": svg_coords[0], "y": svg_coords[1] }
+        return_dict["phone_latlong"] = { "lat": phone_coords["lat"], "long": phone_coords["long"] }
     
     return jsonify(return_dict)
 
 if __name__ == "__main__":
+    redis_server.delete("phone_position")
     app.run(debug=True, host='0.0.0.0', port='5000')

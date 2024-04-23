@@ -32,50 +32,92 @@
     }
   </script>
   <script type="text/javascript">
-    function LoadPhone(x, y) {
-      var phoneLine1 = svg.getElementById("phoneLine1")
-      var phoneLine2 = svg.getElementById("phoneLine2")
-
-      if (phoneLine1 == null) {
-        phoneLine1 = doc_svg.createElementNS("http://www.w3.org/2000/svg", "line");
-        phoneLine1.setAttributeNS(null, 'x1', x - 5);
-        phoneLine1.setAttributeNS(null, 'y1', y - 5);
-        phoneLine1.setAttributeNS(null, 'x2', x + 5);
-        phoneLine1.setAttributeNS(null, 'y2', y + 5);
-        phoneLine1.setAttributeNS(null, 'stroke', color);
-        phoneLine1.setAttributeNS(null, 'stroke-width', '2');
-        phoneLine1.setAttributeNS(null, 'id', "phoneLine1");
-
-        phoneLine2 = doc_svg.createElementNS("http://www.w3.org/2000/svg", "line");
-        phoneLine2.setAttributeNS(null, 'x1', x - 5);
-        phoneLine2.setAttributeNS(null, 'y1', y + 5);
-        phoneLine2.setAttributeNS(null, 'x2', x + 5);
-        phoneLine2.setAttributeNS(null, 'y2', y - 5);
-        phoneLine2.setAttributeNS(null, 'stroke', color);
-        phoneLine2.setAttributeNS(null, 'stroke-width', '2');
-        phoneLine2.setAttributeNS(null, 'id', "phoneLine2");
-
-        doc_svg.appendChild(phoneLine1);
-        doc_svg.appendChild(phoneLine2);
-      }
-      else {
-        phoneLine1.setAttributeNS(null, 'x1', x - 5);
-        phoneLine1.setAttributeNS(null, 'y1', y - 5);
-        phoneLine1.setAttributeNS(null, 'x2', x + 5);
-        phoneLine1.setAttributeNS(null, 'y2', y + 5);
-
-        phoneLine2.setAttributeNS(null, 'x1', x - 5);
-        phoneLine2.setAttributeNS(null, 'y1', y + 5);
-        phoneLine2.setAttributeNS(null, 'x2', x + 5);
-        phoneLine2.setAttributeNS(null, 'y2', y - 5);
-      }
+    function DispatchDrone() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          try {
+            var resp = this.responseText;
+            alert(resp);
+          }
+          catch (err) {
+            alert(this.responseText);
+          }
+        }
+      };
+      xhttp.open("POST", "http://127.0.0.1:5002/phone_planner", true);
+      xhttp.send(JSON.stringify({ lat: window.phone_position.lat, long: window.phone_position.long }));
     }
-    function LoadDrone(droneID, x, y, status) {
+    function LoadPhone(x, y) {
+      // return
       var doc = document.getElementById("map");
       $(doc).ready(function () {
         var doc_svg = doc.getSVGDocument();
         var svg = doc_svg.getElementById("map-svg");
+
+        var svg_g = doc_svg.getElementById("map-svg-g")
+        if (!svg_g) {
+          // If the container doesn't exist, create one
+          svg_g = doc_svg.createElementNS("http://www.w3.org/2000/svg", "g");
+          svg_g.setAttributeNS(null, 'id', 'map-svg-g');
+          svg.appendChild(svg_g);
+        }
+
+        var phoneLine1 = svg.getElementById("phoneLine1")
+        var phoneLine2 = svg.getElementById("phoneLine2")
+
+        const color = "#ff9900"
+
+        if (phoneLine1 == null) {
+          phoneLine1 = doc_svg.createElementNS("http://www.w3.org/2000/svg", "line");
+          phoneLine1.setAttributeNS(null, 'x1', x - 7);
+          phoneLine1.setAttributeNS(null, 'y1', y - 7);
+          phoneLine1.setAttributeNS(null, 'x2', x + 7);
+          phoneLine1.setAttributeNS(null, 'y2', y + 7);
+          phoneLine1.setAttributeNS(null, 'stroke', color);
+          phoneLine1.setAttributeNS(null, 'stroke-width', '2');
+          phoneLine1.setAttributeNS(null, 'id', "phoneLine1");
+
+          phoneLine2 = doc_svg.createElementNS("http://www.w3.org/2000/svg", "line");
+          phoneLine2.setAttributeNS(null, 'x1', x - 7);
+          phoneLine2.setAttributeNS(null, 'y1', y + 7);
+          phoneLine2.setAttributeNS(null, 'x2', x + 7);
+          phoneLine2.setAttributeNS(null, 'y2', y - 7);
+          phoneLine2.setAttributeNS(null, 'stroke', color);
+          phoneLine2.setAttributeNS(null, 'stroke-width', '2');
+          phoneLine2.setAttributeNS(null, 'id', "phoneLine2");
+
+          svg_g.appendChild(phoneLine1);
+          svg_g.appendChild(phoneLine2);
+        }
+        else {
+          phoneLine1.setAttributeNS(null, 'x1', x - 7);
+          phoneLine1.setAttributeNS(null, 'y1', y - 7);
+          phoneLine1.setAttributeNS(null, 'x2', x + 7);
+          phoneLine1.setAttributeNS(null, 'y2', y + 7);
+
+          phoneLine2.setAttributeNS(null, 'x1', x - 7);
+          phoneLine2.setAttributeNS(null, 'y1', y + 7);
+          phoneLine2.setAttributeNS(null, 'x2', x + 7);
+          phoneLine2.setAttributeNS(null, 'y2', y - 7);
+        }
+      })
+    }
+    function LoadDrone(droneID, x, y, status) {
+      var doc = document.getElementById("map");
+      document.getElementById("phone-position-span").innerText = `${window.phone_position?.lat}, ${window.phone_position?.long}`
+      $(doc).ready(function () {
+        var doc_svg = doc.getSVGDocument();
+        var svg = doc_svg.getElementById("map-svg");
         var circleNode = svg.getElementById(droneID);
+
+        var svg_g = doc_svg.getElementById("map-svg-g")
+        if (!svg_g) {
+          // If the container doesn't exist, create one
+          svg_g = doc_svg.createElementNS("http://www.w3.org/2000/svg", "g");
+          svg_g.setAttributeNS(null, 'id', 'map-svg-g');
+          svg.appendChild(svg_g);
+        }
 
         var color = 'red';
         if (status == 'idle') {
@@ -91,7 +133,7 @@
           circleNode.setAttributeNS(null, 'r', '5');
           circleNode.setAttributeNS(null, 'fill', color);
           circleNode.setAttributeNS(null, 'id', droneID);
-          svg.appendChild(circleNode);
+          svg_g.appendChild(circleNode);
         }
         else {
           circleNode.setAttributeNS(null, 'cx', x);
@@ -105,6 +147,8 @@
 
 <body>
   <p>Current Position: </p>
+  <p>Phone Position: <span id="phone-position-span"></span></p>
+  <button onclick="DispatchDrone()">Dispatch drone to phone location!</button>
   <div id="txt"></div>
   <form action="javascript:Submit()">
     <label for="fname">From address:</label><br>
@@ -118,7 +162,7 @@
     var set_delay = 50,
       callout = function () {
         $.ajax({
-          url: 'http://0.0.0.0:5000/callout'
+          url: 'http://localhost:5000/callout'
         })
           .done(function (server_response) {
             var avalaible_drones = Object.keys(server_response.drones)
@@ -128,9 +172,10 @@
               var status = server_response["drones"][droneID].status
               LoadDrone(droneID, x, y, status)
             }
-            let phone_position = server_response.phone_position
-            if(phone_position) {
-              LoadPhone(phone_position.long, phone_position.lat)
+            let phone_svg = server_response.phone_svg
+            if (phone_svg) {
+              window.phone_position = server_response.phone_latlong
+              LoadPhone(phone_svg.x, phone_svg.y)
             }
           })
           .always(function (server_response) {
