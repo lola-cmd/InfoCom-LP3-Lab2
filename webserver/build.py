@@ -3,14 +3,20 @@ from flask import Flask, render_template, request
 from flask.json import jsonify
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
+import base64
+import requests
 import time
 import redis
 import pickle
 import json
+import os
 
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
+SMS_USERNAME = "lo0875li-s@student.lu.se"
+SMS_API_KEY = os.environ["SMS_API_KEY"]
+APP_DOMAIN = os.environ["APP_DOMAIN"]
 
 # change this so that you can connect to your redis server
 # ===============================================
@@ -52,6 +58,28 @@ def post_position():
     print("GOT PHONE POSITION:", lat, long)
     redis_server.set("phone_position", json.dumps({ "lat": lat, "long": long }))
     return jsonify({ "success": True })
+
+@app.route("/send_sms", methods=["POST"])
+def send_sms():
+    data =  json.loads(request.data.decode())
+    phonenr = data["phonenr"]
+    
+    data = {
+        "messages": [
+            {
+                "to": phonenr,
+                "source": "sdk",
+                "body": f"(SPARK DEMO)\n\nhttp://{APP_DOMAIN}/position.html\n\n(SPARK DEMO)"
+            }
+        ]
+    }
+    auth = base64.b64encode(f"{SMS_USERNAME}:{SMS_API_KEY}".encode()).decode()
+    res = requests.post("https://rest.clicksend.com/v3/sms/send", headers={
+        "Content-Type": "application/json",
+        "Authorization": "Basic " + auth
+    }, data=json.dumps(data))
+    print(res)
+    return jsonify({ "success": True, "res": res.text })
 
 @app.route('/callout', methods=['GET'])
 def callout():

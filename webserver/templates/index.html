@@ -30,6 +30,25 @@
       xhttp.open("POST", "http://127.0.0.1:5002/planner", true);
       xhttp.send(JSON.stringify(data));
     }
+    function SubmitSms() {
+      var data = {
+        "phonenr": document.getElementById("phonenr").value,
+      }
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          try {
+            var resp = this.responseText;
+            alert(resp);
+          }
+          catch (err) {
+            alert(this.responseText);
+          }
+        }
+      };
+      xhttp.open("POST", "http://127.0.0.1:5000/send_sms", true);
+      xhttp.send(JSON.stringify(data));
+    }
   </script>
   <script type="text/javascript">
     function DispatchDrone() {
@@ -143,21 +162,44 @@
       })
     }
   </script>
+  <style>
+    #control-container {
+      display: flex;
+      flex-direction: row;
+    }
+  </style>
 </head>
 
 <body>
-  <p>Current Position: </p>
-  <p>Phone Position: <span id="phone-position-span"></span></p>
-  <button onclick="DispatchDrone()">Dispatch drone to phone location!</button>
-  <div id="txt"></div>
-  <form action="javascript:Submit()">
-    <label for="fname">From address:</label><br>
-    <input type="text" id="faddr" name="faddr"><br>
-    <label for="lname">To address:</label><br>
-    <input type="text" id="taddr" name="taddr"><br><br>
-    <input type="submit" value="Search addresses">
-  </form>
-  <object id="map" data="static/images/lund-map.svg" type="image/svg+xml"></object>
+  <h1>Spark super secret drone controller page</h1>
+  <div id="control-container">
+    <div>
+      <fieldset style="width:270px">
+        <legend>Automatic Location</legend>
+        <form action="javascript:SubmitSms()">
+          <label for="phonenr">Phone Number:</label><br>
+          <input id="phonenr">
+          <input type="submit" value="Send SMS">
+          <p>Phone Location: <br><span id="phone-position-span"></span></p>
+        </form>
+        <button onclick="DispatchDrone()">!!! Dispatch drone to phone location !!!</button>
+      </fieldset>
+      <fieldset style="width:270px">
+        <legend>Manual Location</legend>
+        <form action="javascript:Submit()">
+          <div id="txt"></div>
+          <!-- <label for="fname">From address:</label><br>
+          <input type="text" id="faddr" name="faddr"><br> -->
+          <label for="lname">Address:</label><br>
+          <input type="text" id="taddr" name="taddr"><br><br>
+          <input type="submit" value="!!! Dispatch drone to address !!!">
+        </form>
+      </fieldset>
+    </div>
+    <div>
+      <object id="map" data="static/images/lund-map.svg" type="image/svg+xml"></object>
+    </div>
+  </div>
   <script>
     var set_delay = 50,
       callout = function () {
