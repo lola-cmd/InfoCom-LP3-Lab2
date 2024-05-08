@@ -1,0 +1,2 @@
+# spark_website
+In one of our university courses we have a task to add some extra functions to a drone simulation. Our group have decided to simulate the drones to send out a heart defibrillator to a person calling the emergency using the location data of the callers phone. One part of this goal is to create a webpage that the caller will view when clicking on a link to share the location data. I was assigned this task. Furthermore, the creation of this website is a learning experience of html and css for myself. 

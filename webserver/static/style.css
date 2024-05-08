@@ -1,0 +1,30 @@
+body {
+    background-color: rgb(255, 255, 255);
+}
+
+h1 {
+    color: rgb(181, 9, 9);
+    padding: 25px 25px 25px 25px;
+    margin: auto 0;
+    border: 2px solid red;
+    border-radius: 5px;
+}
+
+video {
+    width: 100%;
+    height: auto;
+  }
+
+img {
+    width: 100%;
+    height: auto;
+  }
+
+button {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+    background-image: linear-gradient(to right, #14600c, #578b3b);
+    color: white;
+}
