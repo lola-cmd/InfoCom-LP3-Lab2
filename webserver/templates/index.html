@@ -27,7 +27,7 @@
           }
         }
       };
-      xhttp.open("POST", "http://127.0.0.1:5002/planner", true);
+      xhttp.open("POST", "http://34.88.178.132:5002/planner", true);
       xhttp.send(JSON.stringify(data));
     }
     function SubmitSms() {
@@ -46,7 +46,7 @@
           }
         }
       };
-      xhttp.open("POST", "http://127.0.0.1:5000/send_sms", true);
+      xhttp.open("POST", "/send_sms", true);
       xhttp.send(JSON.stringify(data));
     }
   </script>
@@ -64,7 +64,7 @@
           }
         }
       };
-      xhttp.open("POST", "http://127.0.0.1:5002/phone_planner", true);
+      xhttp.open("POST", "http://34.88.178.132:5002/phone_planner", true);
       xhttp.send(JSON.stringify({ lat: window.phone_position.lat, long: window.phone_position.long }));
     }
     function LoadPhone(x, y) {
@@ -204,7 +204,7 @@
     var set_delay = 50,
       callout = function () {
         $.ajax({
-          url: 'http://localhost:5000/callout'
+          url: '/callout'
         })
           .done(function (server_response) {
             var avalaible_drones = Object.keys(server_response.drones)
