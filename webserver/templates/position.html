@@ -2,14 +2,53 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Position</title>
+  <meta charset="UTF-8">
+  <!--create responsive website-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--specifiec document mode for interent explorer-->
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Spark hjärtstartare</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-    <script>
-        const postPosition = async (lat, long) => {
+  <!--Search engines use the headings to index the structure and content of your web pages.-->
+  <h1>Påbörja hjärt- och lungräddning.</h1>
+  <h2>Hjärtstartare och ambulans är på väg till din position.</h2>
+  <h3>Så här gör du hjärt- och lungräddning</h3>
+  <br>
+
+  <!---
+  <img src="soundon.png" width="270" height="200" alt="hjärta" id="play">
+  <audio id="audio" src=""></audio>--->
+
+  <p>
+    HLR som film.
+    <br>
+  <button id="button" onclick="playPause()" type="button">PLAY VIDEO</button>
+  <br>
+  <video id="hlr" width="320" height="240" autoplay>
+    <source src="hlr.mp4" type="video/mp4">
+  </video></p>
+  <p>
+    HLR i bilder.
+  <img src="hlr-bild.png" sizes="">
+  </p>
+  <script>
+    var vid = document.getElementById("hlr");
+
+    function playPause() {
+      var change = document.getElementById("button");
+      if (change.innerHTML == "PLAY VIDEO") {
+        change.innerHTML = "PAUSE VIDEO";
+        vid.play();
+      } else {
+        change.innerHTML = "PLAY VIDEO";
+        vid.pause();
+      }
+    }
+
+    const postPosition = async (lat, long) => {
             await fetch("/post_position", { method: "POST", body: JSON.stringify({ lat, long }) })
         }
         if ("geolocation" in navigator) {
@@ -20,7 +59,5 @@
             alert("Din enhet stödjer inte GPS via webben, du kommer nog dö :(")
         }
 
-    </script>
+  </script>
 </body>
-
-</html>

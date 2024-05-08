@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Position</title>
+</head>
+
+<body>
+    <script>
+        const postPosition = async (lat, long) => {
+            await fetch("/post_position", { method: "POST", body: JSON.stringify({ lat, long }) })
+        }
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                postPosition(position.coords.latitude, position.coords.longitude);
+            });
+        } else {
+            alert("Din enhet stödjer inte GPS via webben, du kommer nog dö :(")
+        }
+
+    </script>
+</body>
+
+</html>
