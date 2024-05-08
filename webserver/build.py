@@ -69,7 +69,7 @@ def send_sms():
             {
                 "to": phonenr,
                 "source": "sdk",
-                "body": f"(SPARK DEMO)\n\nhttp://{APP_DOMAIN}/position\n\n(SPARK DEMO)"
+                "body": f"(SPARK DEMO)\n\nhttps://{APP_DOMAIN}/position\n\n(SPARK DEMO)"
             }
         ]
     }
