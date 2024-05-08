@@ -1,10 +1,10 @@
 import math
 import requests
 import argparse
-import pygame
+# import pygame
 
-pygame.init()
-pygame.mixer.init()
+# pygame.init()
+# pygame.mixer.init()
 
 def getMovement(src, dst):
     speed = 0.00001
