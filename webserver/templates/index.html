@@ -27,7 +27,7 @@
           }
         }
       };
-      xhttp.open("POST", "http://34.88.178.132:5002/planner", true);
+      xhttp.open("POST", "/planner/planner", true);
       xhttp.send(JSON.stringify(data));
     }
     function SubmitSms() {
@@ -64,7 +64,7 @@
           }
         }
       };
-      xhttp.open("POST", "http://34.88.178.132:5002/phone_planner", true);
+      xhttp.open("POST", "/planner/phone_planner", true);
       xhttp.send(JSON.stringify({ lat: window.phone_position.lat, long: window.phone_position.long }));
     }
     function LoadPhone(x, y) {
