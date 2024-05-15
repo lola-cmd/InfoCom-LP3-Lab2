@@ -87,9 +87,10 @@ def route_planner():
     FromAddress = Addresses['faddr']
     # ToAddress = Addresses['taddr']
     from_location = geolocator.geocode(FromAddress + region, timeout=None)
+    # print(from_location)
     # to_location = geolocator.geocode(ToAddress + region, timeout=None)
     
-    return planner(from_location, { "latitude": 55.701083, "longitude": 13.183756 })
+    return planner({ "latitude": from_location.latitude, "longitude": from_location.longitude }, { "latitude": 55.701083, "longitude": 13.183756 })
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port='5002')
