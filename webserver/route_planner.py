@@ -81,11 +81,11 @@ def phone_planner():
 def route_planner():
     Addresses =  json.loads(request.data.decode())
     FromAddress = Addresses['faddr']
-    ToAddress = Addresses['taddr']
+    # ToAddress = Addresses['taddr']
     from_location = geolocator.geocode(FromAddress + region, timeout=None)
-    to_location = geolocator.geocode(ToAddress + region, timeout=None)
+    # to_location = geolocator.geocode(ToAddress + region, timeout=None)
     
-    return planner(from_location, to_location)
+    return planner(from_location, { "latitude": 55.701083, "longitude": 13.183756 })
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port='5002')
