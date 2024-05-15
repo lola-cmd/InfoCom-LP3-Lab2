@@ -14,7 +14,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
-SMS_USERNAME = "lo0875li-s@student.lu.se"
+SMS_USERNAME = os.environ["SMS_EMAIL"]
 SMS_API_KEY = os.environ["SMS_API_KEY"]
 APP_DOMAIN = os.environ["APP_DOMAIN"]
 
